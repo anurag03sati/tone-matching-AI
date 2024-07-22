@@ -1,0 +1,153 @@
+# import re
+# import json
+# import sys
+# import os
+# from docx import Document
+# # Add the project root to the Python module search path
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# from config.filler_words import FILLER_WORDS, NON_VERBAL_SOUNDS
+# from config.constant import CONTRACTIONS
+#
+# import re
+# import json
+#
+#
+# class WebcBasePreprocessor:
+#     pass
+#
+#
+# class TextCleaner(WebcBasePreprocessor):
+#     @staticmethod
+#     def remove_timestamps(text):
+#         """Remove timestamps from the text using regex."""
+#         text = re.sub(r'\d+:\d+:\d+\.\d+ --> \d+:\d+:\d+\.\d+', '', text)
+#         return text
+#
+#     # @staticmethod
+#     # def expand_contractions(text):
+#     #     """Expand contractions in the text."""
+#     #     return CONTRACTIONS.fix(text)
+#
+#     @staticmethod
+#     def remove_filler_words(text):
+#         """Remove filler words from the text."""
+#         filler_words = {'um', 'uh', 'like', 'you know', 'i mean', 'basically', 'actually'}
+#         words = text.split()
+#         filtered_words = [word for word in words if word.lower() not in filler_words]
+#         return ' '.join(filtered_words)
+#
+#     @staticmethod
+#     def clean_punctuation_spaces(text):
+#         """Clean extra spaces and punctuation from the text."""
+#         text = re.sub(r'\s+', ' ', text)  # Remove extra spaces
+#         text = text.strip()  # Remove leading/trailing spaces
+#         return text
+#
+#     @staticmethod
+#     def extract_lines_before_timestamps(text):
+#         """Extract lines before timestamps."""
+#         lines = text.split('\n')  # Split by newline
+#         extracted_lines = []
+#         timestamp_pattern = re.compile(r'\d+:\d+:\d+\.\d+ --> \d+:\d+:\d+\.\d+')
+#         for line in lines:
+#             if not timestamp_pattern.match(line.strip()):
+#                 extracted_lines.append('\n'.join(line).strip())
+#         return extracted_lines
+#
+#     @staticmethod
+#     def extract_key_value_pairs(text):
+#         """Extract key-value pairs from the lines."""
+#         lines = TextCleaner.extract_lines_before_timestamps(text)
+#         result = []
+#         i = 0
+#         while i < len(lines):
+#             if lines[i] == '':
+#                 i += 1
+#                 continue
+#             new_dict = {}
+#             key = lines[i]
+#             value = lines[i + 1] if i + 1 < len(lines) else ""
+#             new_dict[key] = value
+#             result.append(new_dict)
+#             i += 2  # Move to the next key-value pair
+#
+#         with open('output2.json', 'w') as f:
+#             json.dump(result, f, indent=4)
+#
+#         return result
+#
+#
+#     def transform(self, text):
+#         """Run the cleaning text pipeline."""
+#         text = TextCleaner.remove_timestamps(text)
+#         #text = TextCleaner.expand_contractions(text)
+#         text = TextCleaner.remove_filler_words(text)
+#         text = TextCleaner.clean_punctuation_spaces(text)
+#
+#         return text
+#
+#
+#
+#
+#
+# class Pipeline:
+#     def __init__(self, steps: list[WebcBasePreprocessor]):
+#         self._steps = steps
+#
+#
+#     def transform(self, texts: list[str]):
+#         t = []
+#         for step in self._steps:
+#
+#             for text in texts:
+#                 t.append(step.transform(text))
+#
+#         return t
+#
+#
+#
+#
+# pipeline = Pipeline(steps=[TextCleaner()])
+# print(pipeline.transform('''So I guess just to start simply kind of what you were doing before you owned cloudmine software kind of your career journey, if you wanna walk me through that and then we can go into your business now.
+# 0:0:14.810 --> 0:0:15.340
+# Monica Tsai
+# Sure.
+# 0:0:15.400 --> 0:0:21.320
+# Monica Tsai
+# Uh prior to clot, mine really spend the last 1520 years being in HR professional.
+# 0:0:21.570 --> 0:0:33.220
+# Monica Tsai
+# So I graduating from school was a psychology degree really didn't know what I wanted to do, and people were just saying, well, you know, maybe try this, maybe try that and somehow HR resonated with me.
+# 0:0:33.230 --> 0:0:51.450
+# Monica Tsai
+# So I went in and started a certificate program with BCIT and got lucky enough to also have an opportunity working in an engine, consulting engineering company and kind of that's how I my HR career started really didn't know much about like what does HHR do you know?
+# 0:0:51.460 --> 0:0:56.510
+# Monica Tsai
+# Like what was the exception of knowing that not a lot of people like HR department?
+# 0:0:56.520 --> 0:0:58.230
+# Monica Tsai
+# That's probably my first impression.
+# 0:0:58.540 --> 0:1:2.450
+# Monica Tsai
+# And then little did I know how much I actually enjoyed it.
+# 0:1:2.700 --> 0:1:9.690
+# Monica Tsai
+# It wasn't so much just the opportunity to talk to different people and also learn about what everybody's story is about.
+# 0:1:9.900 --> 0:1:21.420
+# Monica Tsai
+# It was really about knowing that keeping that relationship going and connection really can help to Megan or organization or working environment, a great place to be, you know.
+# 0:1:29.450 --> 0:1:29.720
+# Emma Bergin
+# Umm.
+# 0:1:21.430 --> 0:1:34.670
+# Monica Tsai
+# And given that I am a gamer, a video gamer myself, I've always wanted to work for a video gaming company and knowing that I probably wouldn't want to go back to school studying like computing science or whatnot.
+# 0:1:34.790 --> 0:1:39.320
+# Monica Tsai
+# I just thought that, well, maybe HR can somehow go into a video gaming.
+# 0:1:39.330 --> 0:2:3.360
+# Monica Tsai
+# So I had the opportunity to work for Disney Interactive Studio when I had a studio in Vancouver and then I kind of embark my journey on the in the tech industry ever since ever I said ever since I got into the industry, I really enjoyed the environment, the flexibility and how quickly things are going and really found myself thinking that, well, that is really cool.
+# 0:2:3.370 --> 0:2:25.820
+# Monica Tsai
+# Being able to like create something from the ground up, I had the opportunity of not just observing people doing that, but also helping some aspect of project, specifically game projects to launch the how it can be and that's how I kind of discover I really enjoy creative creating things like the creative side of things.'''.splitlines()))
